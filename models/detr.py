@@ -60,11 +60,13 @@ class DETR(nn.Module):
         if isinstance(samples, (list, torch.Tensor)):
             samples = nested_tensor_from_tensor_list(samples)
         print("truoc_backbone", "*" * 100)
-        print("tensors: ", samples.tensors)
-        print("mask: ", samples.mask)
+        print("tensors: ", samples.tensors.size())
+        print("mask: ", samples.mask.size())
         features, pos = self.backbone(samples)
-        print("sau backbone", features.shape())
         src, mask = features[-1].decompose()
+        print("sau backbone")
+        print("src: ", src.size())
+        print("mask: ", mask.size())
         assert mask is not None
         hs = self.transformer(self.input_proj(src), mask, self.query_embed.weight, pos[-1])[0]
 
